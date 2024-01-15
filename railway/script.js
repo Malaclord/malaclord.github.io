@@ -237,7 +237,6 @@ allLinesToggleCheck.addEventListener("click", (event) => {
 })
 
 function init(stat, conn) {
-	if (mobile) toggleOptionsPanel(false);
 	stations = [];
 	connections = [];
 	lines = [];
@@ -372,7 +371,8 @@ function init(stat, conn) {
 	canvas.width = window.innerWidth;
 
 	loadingScreen.style = "display: none";
-	optionsPanel.style = "";
+	if (mobile) toggleOptionsPanel(false)
+	else toggleOptionsPanel(true);
 
 	allLinesToggleCheck.checked = true;
 	render();
