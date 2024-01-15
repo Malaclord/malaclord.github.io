@@ -492,7 +492,8 @@ showOptionsPanel.addEventListener("click", (event)=>{
 function toggleOptionsPanel(toggle) {
 	if (toggle) {
 		showOptionsPanel.style = "display: none"
-		optionsPanel.style = ""
+		optionsPanel.style = "";
+		setOptionsPanelHeight();
 	} else {
 		showOptionsPanel.style = ""
 		optionsPanel.style = "display: none"
@@ -516,9 +517,14 @@ const renderScale = mobile ? .5 : 1;
 
 const scrollSensitivity = mobile ? .0025 : .001;
 
+function setOptionsPanelHeight() {
+	optionsPanel.style.height = `${window.innerHeight-30}px`;
+}
+
 function render() {
 	canvas.height = window.innerHeight;
 	canvas.width = window.innerWidth;
+	setOptionsPanelHeight();
 
 	canvasClickables = []
 
