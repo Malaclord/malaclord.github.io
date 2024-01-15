@@ -109,6 +109,23 @@ function endClick(click) {
 	});
 }
 
+const linesSearchBar = document.getElementById("linesSearchBar");
+
+linesSearchBar.addEventListener("input", (event) => {
+	const search = event.target.value;
+
+	lineChecks.forEach(lc => {
+		if (lc.name.toLowerCase().includes(search.toLowerCase())
+		) {
+			lc.parentElement.style.display = "block"
+		} else {
+			lc.parentElement.style.display= "none"
+		}
+
+
+	})
+})
+
 canvas.addEventListener('mousedown', (event) => {
 	startClick(event.clientX,event.clientY);
 })
@@ -346,7 +363,8 @@ function init(stat, conn) {
 		const lineLabel = document.createElement("label");
 		lineCheck.type = "checkbox";
 		lineCheck.checked = true;
-		lineCheck.name = l.id;
+		lineCheck.id = l.id;
+		lineCheck.name = l.name;
 		lineLabel.for = l.id;
 		lineLabel.innerText = l.name;
 		lineCheck.addEventListener("click",(event) => {
@@ -404,7 +422,7 @@ function init(stat, conn) {
 	if (params.lines) {
 		const enabledLines = params.lines.split(',');
 		const linesToCheck = lineChecks.filter(l => {
-			return enabledLines.includes(l.name)
+			return enabledLines.includes(l.id)
 		})
 
 		allLinesToggleCheck.click();
