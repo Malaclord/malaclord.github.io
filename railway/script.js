@@ -397,8 +397,9 @@ function init(stat, conn) {
 	allLinesToggleCheck.checked = true;
 
 	if (params.lines) {
+		const enabledLines = params.lines.split(',');
 		const linesToCheck = lineChecks.filter(l => {
-			return params.lines.includes(l.name)
+			return enabledLines.includes(l.name)
 		})
 
 		allLinesToggleCheck.click();
