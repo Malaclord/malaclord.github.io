@@ -388,6 +388,8 @@ function init(stat, conn) {
 		})[0]
 
 		if (station) {
+			if (station.lines.length == 0) showNoConnectonsCheck.checked = true;
+
 			view.x = station.x;
 			view.y = station.y;
 			view.scale = 2;
@@ -431,7 +433,7 @@ function renderStation(stat) {
 	const name = stat.name;
 	let stationLines = lines.filter(l=>{return l.show && stat.lines.includes(l.id)})
 
-	const stationClicked = () => {clickedStation = (`"${stat.name}".`)};
+	const stationClicked = () => {clickedStation = (`"${name}", ${stat.label}, [${x.toFixed(0)};${y.toFixed(0)}]`)};
 
 	if (stationLines.length > 0) {
 		text(x,y+(20/view.scale),10,name,"#ffffff","center",true)
