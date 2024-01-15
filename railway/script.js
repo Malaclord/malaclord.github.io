@@ -101,6 +101,7 @@ function endClick(click) {
 		if (c.contains(mouse.x,mouse.y)) {
 			if (!clicked) c.clickEvent();
 			clicked = true;
+			render();
 		}
 	});
 }
@@ -395,7 +396,7 @@ function renderStation(stat) {
 	const name = stat.name;
 	let stationLines = lines.filter(l=>{return l.show && stat.lines.includes(l.id)})
 
-	const stationClicked = () => console.log(`Clicked station "${stat.name}".`);
+	const stationClicked = () => {clickedStation = (`"${stat.name}".`)};
 
 	if (stationLines.length > 0) {
 		text(x,y+(20/view.scale),10,name,"#ffffff","center",true)
@@ -559,7 +560,7 @@ function render() {
 	- Lines drawn: ${linesDrawn};
 	- Circles drawn: ${circlesDrawn};
 	- Text drawn: ${textDrawn};
-	- View: ${view.x}, ${view.y}, ${view.scale};  
+	- View: ${view.x.toFixed(2)}, ${view.y.toFixed(2)}, ${view.scale.toFixed(2)};  
 	Data info:
 	- No. of stations: ${stations.length}/${allStations};
 	- No. of connections: ${connections.length};
