@@ -88,6 +88,17 @@
 		
 	}
 
+	#showOptionsPanel {
+		position: absolute;
+		top: 10px;
+		left: 20px;
+		z-index: 10;
+		background: var(--primary-bg);
+		border-radius: 5px;
+		padding: 4px 10px 4px 10px;
+		box-shadow: 2px 2px 0px 3px var(--primary-border);
+	}
+
 	.optionsPanelTitle {
 		background: var(--primary-border);
 		border-radius: 5px;
@@ -95,6 +106,10 @@
 		margin: 0;
 		margin-top: 4px;
 		margin-bottom: 4px;
+	}
+
+	.hidden {
+		display: none;
 	}
 
 	</style>
@@ -107,14 +122,19 @@
 	<canvas id="railwayMap"></canvas>
 	<div id="optionsPanel" style="display: none;">
 		<div>
-			<h3 class="optionsPanelTitle">Shire Railway Map</h3>
+			<h3 class="optionsPanelTitle">
+				<button id="hideOptionsPanel">
+					X
+				</button>
+
+				Shire Railway Map</h3>
 		</div>
 		<div class="option">
 			<button id="debugButton">Reload Stations</button><br>
 			<input name="showNoConnections" id="showNoConnectionsCheck" type="checkbox">
 			<label for="showNoConnections">Show Stations With No Connections</label>
 		</div>
-		<div class="option">
+		<div class="option hidden">
 			<div class="optionTitle">Debug Info</div>
 			<div>
 				<input type="checkbox" id="showClickBoxesCheck">
@@ -122,7 +142,7 @@
 			</div>
 			<span id="debugInfo"></span>
 		</div>
-		<div class="option">
+		<div class="option hidden">
 			<div class="optionTitle">Journey Planner (WIP) ((NO WORK))</div>
 			<div>
 				<input type="text" name="journeyFromStation" id="journeyFromStationInput">
@@ -141,6 +161,10 @@
 			<label for="allLinesToggle">All lines</label>
 		</div>
 	</div>
+
+	<button id="showOptionsPanel" style="display: none;">
+		Panel
+	</button>
 
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script src="script.js"></script>
