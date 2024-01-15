@@ -237,6 +237,7 @@ allLinesToggleCheck.addEventListener("click", (event) => {
 })
 
 function init(stat, conn) {
+	if (mobile) toggleOptionsPanel(false);
 	stations = [];
 	connections = [];
 	lines = [];
@@ -514,8 +515,6 @@ const mobile = window.mobileCheck();
 const renderScale = mobile ? .5 : 1;
 
 const scrollSensitivity = mobile ? .0025 : .001;
-
-if (mobile) toggleOptionsPanel(false);
 
 function render() {
 	canvas.height = window.innerHeight;
