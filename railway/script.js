@@ -79,6 +79,9 @@ let clickStart = {x:0,y:0}
 
 function zoom(by) {
 	view.scale -= by * scrollSensitivity * view.scale;
+
+	view.scale = Math.min(Math.max(0.05,view.scale),20);
+
 	render()
 }
 
@@ -601,8 +604,7 @@ function render() {
 		}
 		);
 	ctx.stroke(); foo++;
-		
-
+	
 
 	stations.forEach(s => renderStation(s));
 
