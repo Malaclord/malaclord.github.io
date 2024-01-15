@@ -11,6 +11,7 @@
 
 	:root {
 		--primary-bg: #eee;
+		--secondary-bg: #aaa;
 		--primary-txt: #111111;
 		--primary-border: #ccc;
 	}
@@ -107,18 +108,20 @@
 	}
 
 	.lineListElement {
-		
+		border-radius: 5px;
 	}
 
 	#showOptionsPanel {
-		position: absolute;
-		top: 10px;
-		left: 20px;
-		z-index: 10;
+		margin: 10px;
 		background: var(--primary-bg);
 		border-radius: 5px;
+		border: 0;
 		padding: 4px 10px 4px 10px;
 		box-shadow: 2px 2px 0px 3px var(--primary-border);
+	}
+
+	#showOptionsPanel:hover {
+		background: var(--secondary-bg);
 	}
 
 	.optionsPanelTitle {
@@ -191,12 +194,13 @@
 				<label for="allLinesToggle">All lines</label>
 			</div>
 		</div>
+		<button id="showOptionsPanel" style="display: none;">
+			Expand >
+		</button>
 	</div>
 	
 
-	<button id="showOptionsPanel" style="display: none;">
-		Panel
-	</button>
+
 
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script src="script.js"></script>

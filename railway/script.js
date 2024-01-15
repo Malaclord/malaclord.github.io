@@ -54,8 +54,8 @@ function moveMouse(x,y) {
 	mouse.y = y;
 
 	if (mouse.leftDown) {
-		view.x += mouse.deltaX / view.scale;
-		view.y += mouse.deltaY / view.scale;
+		view.x -= mouse.deltaX / view.scale;
+		view.y -= mouse.deltaY / view.scale;
 	}
 
 	render()
@@ -63,16 +63,16 @@ function moveMouse(x,y) {
 
 function Clickable (x, y, x2, y2, clickEvent) {
 
-    this.x = x;
-    this.y = y;
-    this.x2 = x2;
-    this.y2 = y2;
+	this.x = x;
+	this.y = y;
+	this.x2 = x2;
+	this.y2 = y2;
 	this.clickEvent = clickEvent;
 
-    this.contains = function (x, y) {
-        return this.x <= x && x <= this.x2 &&
-               this.y <= y && y <= this.y2;
-    }
+	this.contains = function (x, y) {
+		return this.x <= x && x <= this.x2 &&
+			   this.y <= y && y <= this.y2;
+	}
 }
 
 let clickStart = {x:0,y:0}
@@ -307,7 +307,8 @@ function init(stat, conn) {
 			to: to,
 			line: line,
 			lineId: lineId,
-			color: color
+			color: color,
+			twoWay: false
 		})
 	});
 
@@ -325,9 +326,12 @@ function init(stat, conn) {
 		if (!from.lines.includes(lineId)) from.lines.push(lineId);
 		if (!to.lines.includes(lineId)) to.lines.push(lineId);
 
-		if (!connections2.some(c2=>{
-			return c2.from == c.to && c2.to == c.from && c2.lineId == c.lineId;
-		})) connections2.push(c);
+		const otherWay = connections2.filter(c2=>{
+			return c2.from == c.to && c2.to == c.from && c2.lineId == c.lineId});
+
+		if (otherWay.length==0) connections2.push(c); else {
+			otherWay[0].twoWay = true;
+		}
 	})
 
 
@@ -351,7 +355,7 @@ function init(stat, conn) {
 			event.target.checked = toggleLine(l);
 		})
 
-		lineDiv.style = `border-left: 10px solid #${l.color}`
+		lineDiv.style = `border-left: 10px solid #${l.color}; background: #${l.color}33`
 
 		lineDiv.className = "lineListElement";
 
@@ -374,7 +378,36 @@ function init(stat, conn) {
 	if (mobile) toggleOptionsPanel(false)
 	else toggleOptionsPanel(true);
 
+	const params = getURLParameters();
+
+	console.log(params)
+
+	if (params.station) {
+		const station = stations.filter(s => {
+			return s.label == params.station;
+		})[0]
+
+		if (station) {
+			view.x = station.x;
+			view.y = station.y;
+			view.scale = 2;
+		}
+	}
+
 	allLinesToggleCheck.checked = true;
+
+	if (params.lines) {
+		const linesToCheck = lineChecks.filter(l => {
+			return params.lines.includes(l.name)
+		})
+
+		allLinesToggleCheck.click();
+
+		linesToCheck.forEach(lc => {
+			lc.click();
+		})
+	}
+
 	render();
 }
 
@@ -425,6 +458,17 @@ window.mobileCheck = function() {
 	return check;
 };
 
+function getURLParameters() {
+	const searchParams = new URLSearchParams(window.location.search);
+	const params = {};
+
+	for (const [key, value] of searchParams.entries()) {
+		params[key] = value;
+	}
+
+	return params;
+}
+
 function renderConnection(conn) {
 	const from = stations.filter(s=>{
 		return s.label == conn.from;
@@ -437,6 +481,7 @@ function renderConnection(conn) {
 	let [x,y]   = [from.x,from.y];
 	let [x2,y2] = [to.x,to.y];
 	const color = conn.color.toLowerCase();
+	const twoWay = conn.twoWay;
 
 	const visibleLines = lines.filter(l => l.show);
 
@@ -457,7 +502,7 @@ function renderConnection(conn) {
 
 	ctx.strokeStyle = `#${color}`;
 
-	const clickLine = () => {clickedLine = (`"${lineName}"; ${from.label} -> ${to.label}.`)};
+	const clickLine = () => {clickedLine = (`"${lineName}"; ${from.label} ${twoWay ? '<->' : '->'} ${to.label}`)};
 
 	line(x,y,x,
 		y2 + (y < y2 ? 4/view.scale : -4/view.scale)
@@ -581,7 +626,6 @@ function render() {
 
 	canvasClickables.reverse();
 
-
 	if (showClickBoxesCheck.checked) {
 		ctx.strokeStyle="#fff";
 		ctx.lineWidth=1;
@@ -600,8 +644,8 @@ function clear() {
 let textDrawn = 0;
 
 function text(x,y,s,text,fill,align,constantS) {
-	const X = (x+view.x)*view.scale+(canvas.width/2);
-	const Y = (y+view.y)*view.scale+(canvas.height/2);
+	const X = (x-view.x)*view.scale+(canvas.width/2);
+	const Y = (y-view.y)*view.scale+(canvas.height/2);
 	const S = constantS ? s : s*view.scale;
 
 	const R = 50;
@@ -620,10 +664,10 @@ function text(x,y,s,text,fill,align,constantS) {
 let linesDrawn = 0;
 
 function line(x,y,x2,y2,stroke,weight,doStroke,clickEvent) {
-	const X = (x+view.x)*view.scale+(canvas.width/2);
-	const Y = (y+view.y)*view.scale+(canvas.height/2);
-	const X2 = (x2+view.x)*view.scale+(canvas.width/2);
-	const Y2 = (y2+view.y)*view.scale+(canvas.height/2);
+	const X =  (x -view.x)*view.scale+(canvas.width /2);
+	const Y =  (y -view.y)*view.scale+(canvas.height/2);
+	const X2 = (x2-view.x)*view.scale+(canvas.width /2);
+	const Y2 = (y2-view.y)*view.scale+(canvas.height/2);
 
 	ctx.strokeStyle = stroke;
 	ctx.lineWidth = weight;
@@ -655,8 +699,8 @@ function fillRect(x,y,w,h) {
 let circlesDrawn = 0;
 
 function circle(x,y,r,fill,stroke,weight,constantR,doStroke, clickEvent) {
-	const X = (x+view.x)*view.scale+(canvas.width/2);
-	const Y = (y+view.y)*view.scale+(canvas.height/2);
+	const X = (x-view.x)*view.scale+(canvas.width/2);
+	const Y = (y-view.y)*view.scale+(canvas.height/2);
 	const R = constantR ? r : r*view.scale;
 
 	if (X+R < 0 || X-R > canvas.width) return;
