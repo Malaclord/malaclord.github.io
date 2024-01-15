@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Shire Railway Map</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+	<style>
+
+	:root {
+		--primary-bg: #eee;
+		--primary-txt: #111111;
+		--primary-border: #ccc;
+	}
+
+	* {
+		margin: 0px;
+		border: 0;
+	}
+
+	html,
+	body {
+	  width: 100%;
+	  height: 100%;
+
+	  overflow: hidden;
+	  /*  Disable scrollbars */
+	  display: block;
+	  /* No floating content on sides */
+	  font-family: 'Lato', sans-serif;
+	  color: var(--primary-txt);
+	}
+
+	#railwayMap {
+		z-index: 5;
+	}
+
+	#loadingScreen {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+	}
+
+	#optionsPanel {
+		position: absolute;
+		top: 10px;
+		left: 20px;
+		z-index: 10;
+		background: var(--primary-bg);
+		border-radius: 5px;
+		padding: 4px 10px 4px 10px;
+		box-shadow: 2px 2px 0px 3px var(--primary-border);
+	}
+
+	.option {
+		background: var(--primary-bg);
+		border-radius: 5px;
+		padding: 10px 10px 10px 10px;
+		border: solid 2px var(--primary-border);
+		margin-top: 4px;
+		margin-bottom: 4px;
+	}
+
+	.optionTitle {
+		border-bottom: 2px solid var(--primary-border);
+		font-weight: bold;
+	}
+	
+	button {
+		border: 2px solid var(--primary-border);
+		border-radius: 5px;
+	}
+
+	#linesList {
+		height: 450px;
+		overflow: hidden;
+		overflow-y:scroll;
+	}
+
+	input {
+		margin-left: 1px;
+	}
+
+	.lineListElement {
+		
+	}
+
+	.optionsPanelTitle {
+		background: var(--primary-border);
+		border-radius: 5px;
+		padding: 10px 10px 10px 10px;
+		margin: 0;
+		margin-top: 4px;
+		margin-bottom: 4px;
+	}
+
+	</style>
+</head>
+<body>
+	<div id="loadingScreen">
+		<h1>Loading . . .</h1>
+		<span class=""></span>
+	</div>
+	<canvas id="railwayMap"></canvas>
+	<div id="optionsPanel" style="display: none;">
+		<div>
+			<h3 class="optionsPanelTitle">Shire Railway Map</h3>
+		</div>
+		<div class="option">
+			<button id="debugButton">Reload Stations</button><br>
+			<input name="showNoConnections" id="showNoConnectionsCheck" type="checkbox">
+			<label for="showNoConnections">Show Stations With No Connections</label>
+		</div>
+		<div class="option">
+			<div class="optionTitle">Debug Info</div>
+			<div>
+				<input type="checkbox" id="showClickBoxesCheck">
+				<label for="showClickBoxesCheck">Show clickable areas</label>
+			</div>
+			<span id="debugInfo"></span>
+		</div>
+		<div class="option">
+			<div class="optionTitle">Journey Planner (WIP) ((NO WORK))</div>
+			<div>
+				<input type="text" name="journeyFromStation" id="journeyFromStationInput">
+				<label for="journeyFromStation">From</label>
+				<input type="text" name="journeyToStation" id="journeyToStationInput">
+				<label for="journeyToStation">To</label>
+			</div>
+			<div>
+				<button id="planJourneyButton">Plan journey</button>
+			</div>
+		</div>
+		<div class="option">
+			<div class="optionTitle">Lines (WIP)</div>
+			<div id="linesList"></div>
+			<input type="checkbox" id="allLinesToggleCheck" name="allLinesToggle">
+			<label for="allLinesToggle">All lines</label>
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="script.js"></script>
+</body>
+</html>
+
